@@ -1,0 +1,31 @@
+# Compiled module facts (pre-collected on x86 workstation)
+
+## Native libraries (inputs/lib/arm64-v8a/)
+libapp.so     11,256,752 bytes  — application's compiled Dart module (AOT snapshot, arm64)
+libflutter.so 10,463,824 bytes  — Flutter engine runtime
+
+## Engine identification (IMPORTANT — enables clean blutter build)
+The engine library is BYTE-IDENTICAL to the official Flutter release build:
+  engine git hash : 1ac611c64eadbd93c5f5aba5494b8fc3b35ee952
+  dart/flutter    : 3.1.0 stable line (build stamp Tue Aug 15 2023)
+  sha1(libflutter.so) == sha1(official android-arm64-release stripped libflutter.so)
+=> This is a STOCK engine (not customized). blutter should auto-detect the version
+   and build a matching analyzer binary without trouble.
+
+## Dart snapshot header (from libapp.so)
+  snapshot magic @ file 0x200 (0xf5f5dcdc)
+  feature string : product no-code_comments dwarf_stack_traces_mode no-lazy_dispatchers
+                   dedup_instructions no-asserts arm64 android compressed-pointers null-safety
+  build id symbol: _kDartSnapshotBuildId @ 0x1c8 (0x20 bytes)
+
+## ELF layout of libapp.so (file_offset == vaddr for this build)
+  _kDartVmSnapshotData            vaddr 0x000200  size 0x003b90
+  _kDartVmSnapshotInstructions    vaddr 0x24c000  size 0x007420
+  _kDartIsolateSnapshotData       vaddr 0x003dc0  size 0x245830
+  _kDartIsolateSnapshotInstructions vaddr 0x253440 size 0x868510
+  .text (instructions) range      0x253440 .. 0xabb950  (8,815,888 bytes)
+  object-pool / string data       0x003dc0 .. 0x2495f0
+
+## Packaging
+  The package is NOT wrapped by any loader/shell. Standard unzip / rebuild / re-sign
+  is safe. The arm64-v8a folder is the only ABI present in lib/.

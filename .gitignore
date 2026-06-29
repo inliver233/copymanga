@@ -1,0 +1,5 @@
+# worker temp / build scratch
+blutter_src/
+outputs/_repack/
+outputs/_aligned.apk
+*.idsig
